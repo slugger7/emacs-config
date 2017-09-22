@@ -15,20 +15,25 @@
 (require 'package)
 (package-initialize)
 (zerodark-setup-modeline-format)
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(ansi-color-names-vector
-   ["#242424" "#e5786d" "#95e454" "#cae682" "#8ac6f2" "#333366" "#ccaa8f" "#f6f3e8"])
- '(custom-enabled-themes (quote (zerodark)))
- '(custom-safe-themes
-   (quote
-    ("6570843991e40121f854432826e9fd175aec6bd382ef217b2c0c46da37f3af18" default))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
+(tool-bar-mode -1)
+(add-hook 'prog-mode-hook #'electric-pair-mode)
+;; javascript
+(add-hook 'js-mode-hook #'tern-mode)
+(defun kevin-turn-on-eslint ()
+  "Turn on eslint."
+  (flycheck-select-checker 'javascript-eslint))
+(add-hook 'js-mode-hook #'kevin-turn-on-eslint)
+(add-hook 'js-mode-hook #'flycheck-mode)
+;; Mini buffer completion (helm) (ivy) (ido)
+(icomplete-mode)
+(define-key icomplete-minibuffer-map (kbd "C-'")
+  'icomplete-force-complete-and-exit)
+(define-key icomplete-minibuffer-map (kbd "M-'")
+  'icomplete-force-complete-and-exit)
+(define-key icomplete-minibuffer-map [?\M-.] 'icomplete-forward-completions)
+(define-key icomplete-minibuffer-map [?\M-,] 'icomplete-backward-completions)
+(setq icomplete-delay-completions-threshold 400)
+(setq icomplete-compute-delay 0)
+(setq icomplete-show-matches-on-no-input t)
+;; Custom
+(setq custom-file "~/.emacs.d/custom.el")
