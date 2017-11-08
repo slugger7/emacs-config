@@ -12,9 +12,7 @@
     ("6570843991e40121f854432826e9fd175aec6bd382ef217b2c0c46da37f3af18" default)))
  '(indent-tabs-mode nil)
  '(js-indent-level 2)
- '(package-selected-packages
-   (quote
-    (iedit tide typescript-mode js2-highlight-vars recentf-ext yaml-mode web-mode rjsx-mode tern-auto-complete tern zerodark-theme)))
+ '(package-selected-packages (quote (tern-auto-complete tern zerodark-theme)))
  '(tab-width 2))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
