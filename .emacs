@@ -16,6 +16,7 @@
 (package-initialize)
 (zerodark-setup-modeline-format)
 (tool-bar-mode -1)
+(scroll-bar-mode -1)
 (show-paren-mode 1)
 (menu-bar-mode 0)
 (setq-default indent-tabs-mode nil)
@@ -77,60 +78,67 @@
     (setq company-backends '(company-tide)))
 (add-hook 'typescript-mode-hook #'quiescent-setup-tide-mode)
 
+;;rest client
+(load-file "~/.emacs.d/restclient.el")
 
-;; fix regex compile
-(add-to-list 'compilation-error-regexp-alist-alist
-             '(node "^[  ]+at \\(?:[^\(\n]+ \(\\)?\\([a-zA-Z\.0-9_/-]+\\):\\([0-9]+\\):\\([0-9]+\\)\)?$"
-                    1 ;; file
-                    2 ;; line
-                    3 ;; column
-                    ))
-(add-to-list 'compilation-error-regexp-alist
-             'node)
+;;org mode
+(setq inhibit-splash-screen t)
+;; Enable transient mark mode
+(transient-mark-mode 1)
+;; Enable Org mode
+(require 'org)
+;; Add more states
+(setq org-todo-keyword-faces
+      '(
+        ("IN-POGRESS" . (:background "orange" :foreground "orange" :weight bold))
+        ))
+(setq org-todo-keywords
+      '((sequence "TODO" "IN-PROGRESS" "DONE")))
+;;org theme
+;;(org-beautify)
 
-(add-to-list 'compilation-error-regexp-alist-alist
-             '(npm "(\\(.*\..*?\\):\\([0-9]*\\):\\([0-9]*\\)"
-                   1 ;; file
-                   2 ;; line
-                   3 ;; column
-                   ))
-(add-to-list 'compilation-error-regexp-alist
-             'npm)
+;; editorconfig
+;;(use-package editorconfig
+  ;;           :ensure t
+    ;;         :config
+      ;;       (editorconfig-mode 1))
+(eval-when-compile
+ (require 'cl))
 
-(add-to-list 'compilation-error-regexp-alist-alist
-             '(jest "(\\(.*\..*?\\):\\([0-9]*\\):\\([0-9]*\\)"
-                   1 ;; file
-                   2 ;; line
-                   3 ;; column
-                   ))
-(add-to-list 'compilation-error-regexp-alist
-             'jest)
+(defun quiescent-nuke-fringe (&optional window)
+ "Remove the fringes in WINDOW."
+ (set-window-fringes window 0 0))
 
-(add-to-list 'compilation-error-regexp-alist-alist
-             '(mocha "(\\(.*\..*?\\):\\([0-9]*\\):\\([0-9]*\\)"
-                     1 ;; file
-                     2 ;; line
-                     3 ;; column
-                     ))
-(add-to-list 'compilation-error-regexp-alist
-             'mocha)
+(defun quiescent-setup-shell-like ()
+ "Setup shell mode to my liking."
+ (progn
+   (quiescent-nuke-fringe)
+   (setq mode-line-format nil)))
 
-(add-to-list 'compilation-error-regexp-alist-alist
-             '(webpack "\\(\\./[/_-a-zA-Z0-9]+\\.[a-z]+\\) ?\\([0-9]+:[0-9]+\\|$\\)"
-                       1 ;; file
-                       2 ;; line
-                       3 ;; column
-                       ))
+(add-hook 'shell-mode-hook       #'quiescent-setup-shell-like)
+(add-hook 'eshell-mode-hook      #'quiescent-setup-shell-like)
+(add-hook 'compilation-mode-hook #'quiescent-setup-shell-like)
 
-(add-to-list 'compilation-error-regexp-alist
-             'webpack)
+(defun quiescent-in-a-mode (window modes)
+ "Produce t if buffer in WINDOW is in mode contained in MODES."
+ (cl-some (apply-partially #'quiescent-window-contains-buffer-in-mode window)
+          modes))
 
-(add-to-list 'compilation-error-regexp-alist-alist
-             '(eslint "\\(^/.*\\.jsx?$\\)\n +\\([0-9]+\\):\\([0-9]+\\)"
-                      1 ;; file
-                      2 ;; line
-                      3 ;; column
-                      ))
+(defvar quiescent-kill-fringes-modes '(shell-mode compilation-mode eshell-mode)
+ "The modes in which fringes should be killed.")
 
-(add-to-list 'compilation-error-regexp-alist
-             'eslint)
+(defun quiescent-setup-fringe-widths ()
+ "Make the fringe width 0 in windows with certain modes active."
+ (walk-windows (lambda (window)
+                 (when (quiescent-in-a-mode window quiescent-kill-fringes-modes)
+                   (quiescent-nuke-fringe window)))
+               nil
+               'visible))
+
+(defun quiescent-window-contains-buffer-in-mode (window mode)
+ "Produce t if WINDOW displays a buffer in mode MODE."
+ (eq (buffer-local-value 'major-mode
+                         (window-buffer window))
+     mode))
+
+(add-hook 'buffer-list-update-hook #'quiescent-setup-fringe-widths)

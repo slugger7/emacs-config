@@ -9,12 +9,12 @@
  '(custom-enabled-themes (quote (zerodark)))
  '(custom-safe-themes
    (quote
-    ("6570843991e40121f854432826e9fd175aec6bd382ef217b2c0c46da37f3af18" default)))
+    ("e297f54d0dc0575a9271bb0b64dad2c05cff50b510a518f5144925f627bb5832" "ab928e0eedcdf9323f9589b7d761c6f5c746b5621fb0224837808f18c18981e8" "6570843991e40121f854432826e9fd175aec6bd382ef217b2c0c46da37f3af18" default)))
  '(indent-tabs-mode nil)
  '(js-indent-level 2)
  '(package-selected-packages
    (quote
-    (iedit tide typescript-mode js2-highlight-vars recentf-ext yaml-mode web-mode rjsx-mode tern-auto-complete tern zerodark-theme)))
+    (dockerfile-mode markdownfmt editorconfig org-beautify-theme markdown-mode flymd iedit tide typescript-mode js2-highlight-vars recentf-ext yaml-mode web-mode rjsx-mode tern-auto-complete tern zerodark-theme)))
  '(tab-width 2))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
