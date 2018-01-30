@@ -19,6 +19,7 @@
 (scroll-bar-mode -1)
 (show-paren-mode 1)
 (menu-bar-mode 0)
+(subword-mode 1)
 (setq-default indent-tabs-mode nil)
 (add-hook 'prog-mode-hook #'electric-pair-mode)
 ;; javascript
@@ -97,11 +98,8 @@
 ;;org theme
 ;;(org-beautify)
 
-;; editorconfig
-;;(use-package editorconfig
-  ;;           :ensure t
-    ;;         :config
-      ;;       (editorconfig-mode 1))
+;; editorconfig(
+(editorconfig-mode 1)
 (eval-when-compile
  (require 'cl))
 
